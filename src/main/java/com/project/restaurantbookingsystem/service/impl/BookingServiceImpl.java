@@ -3,10 +3,7 @@ package com.project.restaurantbookingsystem.service.impl;
 import com.project.restaurantbookingsystem.dao.BookingDao;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
-import com.project.restaurantbookingsystem.entity.DiningTable;
-import com.project.restaurantbookingsystem.entity.Reservation;
-import com.project.restaurantbookingsystem.entity.ReservationPk;
-import com.project.restaurantbookingsystem.entity.Restaurant;
+import com.project.restaurantbookingsystem.entity.*;
 import com.project.restaurantbookingsystem.service.BookingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,11 +78,13 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Reservation createNewReservation(Reservation reservation) {
+        reservation.setStatus(BookingStatus.ACTIVE);
         return bookingDao.createNewReservation(reservation);
     }
 
     @Override
     public Reservation cancelReservation(Reservation reservation) {
+        reservation.setStatus(BookingStatus.CANCELLED);
         return bookingDao.cancelReservation(reservation);
     }
 
@@ -94,8 +93,8 @@ public class BookingServiceImpl implements BookingService {
     public Reservation updateReservation(UpdateReservationDto updateReservationDto) {
         Map<String, Reservation> reservationMap =
                 createReservationEntities(updateReservationDto);
-        bookingDao.cancelReservation(reservationMap.get("existing"));
-        return bookingDao.createNewReservation(reservationMap.get("new"));
+        cancelReservation(reservationMap.get("existing"));
+        return createNewReservation(reservationMap.get("new"));
     }
 
     private Map<String, Reservation> createReservationEntities(UpdateReservationDto updateReservationDto) {
@@ -115,7 +114,6 @@ public class BookingServiceImpl implements BookingService {
         reservationPk.setTableId(reservationDto.getTableId());
         reservationPk.setDate(reservationDto.getDate());
         reservation.setReservationPk(reservationPk);
-        reservation.setStatus(reservationDto.getStatus());
         return reservation;
     }
 

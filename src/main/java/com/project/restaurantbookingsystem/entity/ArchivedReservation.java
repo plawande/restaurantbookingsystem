@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
 @Getter
@@ -17,6 +19,7 @@ public class ArchivedReservation extends BaseClass {
     @Column(name = "date")
     private LocalDate date;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private BookingStatus status;
 }
