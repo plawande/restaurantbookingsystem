@@ -12,5 +12,4 @@ import java.time.LocalDate;
 public class ReservationDto {
     private Long tableId;
     private LocalDate date;
-    private String status;
 }

@@ -77,13 +77,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Reservation createNewReservation(Reservation reservation) {
+    public Reservation createNewReservation(ReservationDto reservationDto) {
+        Reservation reservation = createReservationEntity(reservationDto);
         reservation.setStatus(BookingStatus.ACTIVE);
         return bookingDao.createNewReservation(reservation);
     }
 
     @Override
-    public Reservation cancelReservation(Reservation reservation) {
+    public Reservation cancelReservation(ReservationDto reservationDto) {
+        Reservation reservation = createReservationEntity(reservationDto);
         reservation.setStatus(BookingStatus.CANCELLED);
         return bookingDao.cancelReservation(reservation);
     }
@@ -93,15 +95,17 @@ public class BookingServiceImpl implements BookingService {
     public Reservation updateReservation(UpdateReservationDto updateReservationDto) {
         Map<String, Reservation> reservationMap =
                 createReservationEntities(updateReservationDto);
-        cancelReservation(reservationMap.get("existing"));
-        return createNewReservation(reservationMap.get("new"));
+        bookingDao.cancelReservation(reservationMap.get("existing"));
+        return bookingDao.createNewReservation(reservationMap.get("new"));
     }
 
     private Map<String, Reservation> createReservationEntities(UpdateReservationDto updateReservationDto) {
         Reservation existingReservation =
                 createReservationEntity(updateReservationDto.getExistingReservationDto());
+        existingReservation.setStatus(BookingStatus.CANCELLED);
         Reservation newReservation =
                 createReservationEntity(updateReservationDto.getNewReservationDto());
+        newReservation.setStatus(BookingStatus.ACTIVE);
         Map<String, Reservation> reservationMap = new HashMap<>();
         reservationMap.put("existing", existingReservation);
         reservationMap.put("new", newReservation);

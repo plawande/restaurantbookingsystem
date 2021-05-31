@@ -1,5 +1,6 @@
 package com.project.restaurantbookingsystem.service;
 
+import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
@@ -18,9 +19,9 @@ public interface BookingService {
 
     Map<LocalDate, List<DiningTable>> findTablesByRestaurantIdAndSeatingCapacityAndDateRange(Long id, Long capacity, LocalDate startDate, LocalDate endDate);
 
-    Reservation createNewReservation(Reservation reservation);
+    Reservation createNewReservation(ReservationDto reservationDto);
 
-    Reservation cancelReservation(Reservation reservation);
+    Reservation cancelReservation(ReservationDto reservationDto);
 
     Reservation updateReservation(UpdateReservationDto updateReservationDto);
 }

@@ -1,5 +1,6 @@
 package com.project.restaurantbookingsystem.controller;
 
+import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.service.BookingService;
@@ -19,14 +20,14 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
-        Reservation createdReservation = bookingService.createNewReservation(reservation);
+    public ResponseEntity<?> createReservation(@RequestBody ReservationDto reservationDto) {
+        Reservation createdReservation = bookingService.createNewReservation(reservationDto);
         return ResponseEntity.ok(createdReservation);
     }
 
     @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> cancelReservation(@RequestBody Reservation reservation) {
-        Reservation cancelledReservation = bookingService.cancelReservation(reservation);
+    public ResponseEntity<?> cancelReservation(@RequestBody ReservationDto reservationDto) {
+        Reservation cancelledReservation = bookingService.cancelReservation(reservationDto);
         return ResponseEntity.ok(cancelledReservation);
     }
 
