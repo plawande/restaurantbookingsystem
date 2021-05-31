@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-public class CancelledReservation extends BaseClass {
+public class ArchivedReservation extends BaseClass {
     @Column(name = "table_id")
     private Long tableId;
 
