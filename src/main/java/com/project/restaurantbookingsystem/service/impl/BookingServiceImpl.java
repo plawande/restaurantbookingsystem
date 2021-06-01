@@ -29,6 +29,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public Restaurant findRestaurantById(Long id) {
+        return bookingDao.findRestaurantById(id);
+    }
+
+    @Override
     public List<DiningTable> findTablesByRestaurantIdAndSeatingCapacity(Long id,
                                                                         Long capacity) {
         return bookingDao.findTablesByRestaurantIdAndSeatingCapacity(id, capacity);

@@ -14,6 +14,8 @@ import java.util.Map;
 public interface BookingService {
     List<Restaurant> findAllRestaurants();
 
+    Restaurant findRestaurantById(Long id);
+
     List<DiningTable> findTablesByRestaurantIdAndSeatingCapacity(Long id, Long capacity);
 
     List<Reservation> findReservationsByRestaurantIdAndDateRange(Long id, LocalDate startDate, LocalDate endDate);

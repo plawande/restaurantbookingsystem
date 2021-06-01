@@ -10,6 +10,8 @@ import java.util.List;
 public interface BookingDao {
     List<Restaurant> findAllRestaurants();
 
+    Restaurant findRestaurantById(Long id);
+
     List<DiningTable> findTablesByRestaurantIdAndSeatingCapacity(Long id, Long capacity);
 
     List<Reservation> findReservationsByRestaurantIdAndDateRange(Long id, LocalDate startDate, LocalDate endDate);

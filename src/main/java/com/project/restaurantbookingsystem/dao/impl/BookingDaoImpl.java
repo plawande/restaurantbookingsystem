@@ -23,12 +23,18 @@ public class BookingDaoImpl implements BookingDao {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public List<Restaurant> findAllRestaurants() {
         return entityManager.createQuery("" +
                 "Select r " +
-                "from Restaurant r " +
-                "left join fetch r.tables ", Restaurant.class)
+                "from Restaurant r ", Restaurant.class)
                 .getResultList();
+    }
+
+    @Override
+    @Transactional
+    public Restaurant findRestaurantById(Long id) {
+        return entityManager.find(Restaurant.class, id);
     }
 
     @Override
@@ -82,3 +88,4 @@ public class BookingDaoImpl implements BookingDao {
 //https://www.baeldung.com/spring-dataIntegrityviolationexception
 //https://stackoverflow.com/questions/30088649/how-to-use-multiple-join-fetch-in-one-jpql-query
 //https://vladmihalcea.com/jpa-persist-merge-hibernate-save-update-saveorupdate/
+//https://stackoverflow.com/questions/1607532/when-to-use-entitymanager-find-vs-entitymanager-getreference-with-jpa
