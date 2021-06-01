@@ -1,6 +1,7 @@
 package com.project.restaurantbookingsystem.service.impl;
 
 import com.project.restaurantbookingsystem.dao.BookingDao;
+import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.*;
@@ -134,5 +135,25 @@ public class BookingServiceImpl implements BookingService {
             }
         }
         return dates;
+    }
+
+    @Override
+    public Map<LocalDate, List<DiningTableDto>> getTableAvailabilityDtoMap(Map<LocalDate, List<DiningTable>> tableAvailabilityMap) {
+        Map<LocalDate, List<DiningTableDto>> diningTableDtoMap = new LinkedHashMap<>();
+        for(Map.Entry entry: tableAvailabilityMap.entrySet()) {
+            List<DiningTable> entityList = (List<DiningTable>) entry.getValue();
+            List<DiningTableDto> entityDtoList =
+                    entityList.stream().map(entity -> mapToDiningTableDto(entity)).collect(Collectors.toList());
+            diningTableDtoMap.put((LocalDate) entry.getKey(), entityDtoList);
+        }
+        return diningTableDtoMap;
+    }
+
+    private DiningTableDto mapToDiningTableDto(DiningTable diningTable) {
+        DiningTableDto diningTableDto = new DiningTableDto();
+        diningTableDto.setId(diningTable.getId());
+        diningTableDto.setNumber(diningTable.getNumber());
+        diningTableDto.setCapacity(diningTable.getCapacity());
+        return diningTableDto;
     }
 }
