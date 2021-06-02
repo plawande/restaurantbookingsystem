@@ -66,14 +66,10 @@ public class BookingServiceImpl implements BookingService {
         for(LocalDate date: dates) {
             List<Long> bookedTableIds = reservationsMap.get(date);
             if(bookedTableIds != null) {
-                nonReservedMap.put(date, new ArrayList<>());
-                allTablesByCapacity.stream()
+                List<DiningTable> diningTableList = allTablesByCapacity.stream()
                         .filter(diningTable -> !bookedTableIds.contains(diningTable.getId()))
-                        .map(diningTable -> {
-                            List<DiningTable> list = nonReservedMap.get(date);
-                            return list.add(diningTable);
-                        })
                         .collect(Collectors.toList());
+                nonReservedMap.put(date, diningTableList);
             } else {
                 nonReservedMap.put(date, allTablesByCapacity);
             }
@@ -85,15 +81,17 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Reservation createNewReservation(ReservationDto reservationDto) {
         Reservation reservation = createReservationEntity(reservationDto);
-        reservation.setStatus(BookingStatus.ACTIVE);
         return bookingDao.createNewReservation(reservation);
     }
 
     @Override
-    public Reservation cancelReservation(ReservationDto reservationDto) {
+    @Transactional
+    public void cancelReservation(ReservationDto reservationDto) {
         Reservation reservation = createReservationEntity(reservationDto);
-        reservation.setStatus(BookingStatus.CANCELLED);
-        return bookingDao.cancelReservation(reservation);
+        ArchivedReservation archivedReservation = createReservationArchive(reservation);
+        archivedReservation.setStatus(BookingStatus.CANCELLED);
+        bookingDao.archiveReservation(archivedReservation);
+        bookingDao.cancelReservation(reservation);
     }
 
     @Override
@@ -101,17 +99,26 @@ public class BookingServiceImpl implements BookingService {
     public Reservation updateReservation(UpdateReservationDto updateReservationDto) {
         Map<String, Reservation> reservationMap =
                 createReservationEntities(updateReservationDto);
-        bookingDao.cancelReservation(reservationMap.get("existing"));
+        Reservation existingReservation = reservationMap.get("existing");
+        ArchivedReservation archivedReservation = createReservationArchive(existingReservation);
+        archivedReservation.setStatus(BookingStatus.UPDATED);
+        bookingDao.archiveReservation(archivedReservation);
+        bookingDao.cancelReservation(existingReservation);
         return bookingDao.createNewReservation(reservationMap.get("new"));
+    }
+
+    private ArchivedReservation createReservationArchive(Reservation existingReservation) {
+        ArchivedReservation archivedReservation = new ArchivedReservation();
+        archivedReservation.setTableId(existingReservation.getReservationPk().getTableId());
+        archivedReservation.setDate(existingReservation.getReservationPk().getDate());
+        return archivedReservation;
     }
 
     private Map<String, Reservation> createReservationEntities(UpdateReservationDto updateReservationDto) {
         Reservation existingReservation =
                 createReservationEntity(updateReservationDto.getExistingReservationDto());
-        existingReservation.setStatus(BookingStatus.CANCELLED);
         Reservation newReservation =
                 createReservationEntity(updateReservationDto.getNewReservationDto());
-        newReservation.setStatus(BookingStatus.ACTIVE);
         Map<String, Reservation> reservationMap = new HashMap<>();
         reservationMap.put("existing", existingReservation);
         reservationMap.put("new", newReservation);
@@ -145,11 +152,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Map<LocalDate, List<DiningTableDto>> getTableAvailabilityDtoMap(Map<LocalDate, List<DiningTable>> tableAvailabilityMap) {
         Map<LocalDate, List<DiningTableDto>> diningTableDtoMap = new LinkedHashMap<>();
-        for(Map.Entry entry: tableAvailabilityMap.entrySet()) {
-            List<DiningTable> entityList = (List<DiningTable>) entry.getValue();
+        for(Map.Entry<LocalDate, List<DiningTable>> entry: tableAvailabilityMap.entrySet()) {
+            List<DiningTable> entityList = entry.getValue();
             List<DiningTableDto> entityDtoList =
-                    entityList.stream().map(entity -> mapToDiningTableDto(entity)).collect(Collectors.toList());
-            diningTableDtoMap.put((LocalDate) entry.getKey(), entityDtoList);
+                    entityList.stream().map(this::mapToDiningTableDto).collect(Collectors.toList());
+            diningTableDtoMap.put(entry.getKey(), entityDtoList);
         }
         return diningTableDtoMap;
     }

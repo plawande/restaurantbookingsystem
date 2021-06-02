@@ -24,7 +24,7 @@ public interface BookingService {
 
     Reservation createNewReservation(ReservationDto reservationDto);
 
-    Reservation cancelReservation(ReservationDto reservationDto);
+    void cancelReservation(ReservationDto reservationDto);
 
     Reservation updateReservation(UpdateReservationDto updateReservationDto);
 

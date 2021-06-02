@@ -1,5 +1,6 @@
 package com.project.restaurantbookingsystem.dao;
 
+import com.project.restaurantbookingsystem.entity.ArchivedReservation;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.Restaurant;
@@ -18,5 +19,7 @@ public interface BookingDao {
 
     Reservation createNewReservation(Reservation reservation);
 
-    Reservation cancelReservation(Reservation reservation);
+    void cancelReservation(Reservation reservation);
+
+    ArchivedReservation archiveReservation(ArchivedReservation archivedReservation);
 }

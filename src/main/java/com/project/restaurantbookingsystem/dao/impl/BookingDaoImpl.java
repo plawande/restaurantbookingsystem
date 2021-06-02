@@ -1,6 +1,7 @@
 package com.project.restaurantbookingsystem.dao.impl;
 
 import com.project.restaurantbookingsystem.dao.BookingDao;
+import com.project.restaurantbookingsystem.entity.ArchivedReservation;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.Restaurant;
@@ -80,8 +81,17 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     @Transactional
-    public Reservation cancelReservation(Reservation reservation) {
-        return entityManager.merge(reservation);
+    public void cancelReservation(Reservation reservation) {
+        Reservation reservationPersistent =
+                entityManager.find(Reservation.class, reservation.getReservationPk());
+        entityManager.remove(reservationPersistent);
+    }
+
+    @Override
+    @Transactional
+    public ArchivedReservation archiveReservation(ArchivedReservation archivedReservation) {
+        entityManager.persist(archivedReservation);
+        return archivedReservation;
     }
 }
 
@@ -89,3 +99,4 @@ public class BookingDaoImpl implements BookingDao {
 //https://stackoverflow.com/questions/30088649/how-to-use-multiple-join-fetch-in-one-jpql-query
 //https://vladmihalcea.com/jpa-persist-merge-hibernate-save-update-saveorupdate/
 //https://stackoverflow.com/questions/1607532/when-to-use-entitymanager-find-vs-entitymanager-getreference-with-jpa
+//https://stackoverflow.com/questions/11539720/javax-persistence-entitymanager-remove-method/11539796

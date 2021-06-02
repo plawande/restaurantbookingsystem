@@ -13,10 +13,6 @@ public class Reservation {
     @EmbeddedId
     private ReservationPk reservationPk;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private BookingStatus status;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id", insertable = false, updatable = false)
     private DiningTable table;

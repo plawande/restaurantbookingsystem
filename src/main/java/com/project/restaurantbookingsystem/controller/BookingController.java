@@ -31,8 +31,8 @@ public class BookingController {
 
     @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> cancelReservation(@RequestBody ReservationDto reservationDto) {
-        Reservation cancelledReservation = bookingService.cancelReservation(reservationDto);
-        return ResponseEntity.ok(cancelledReservation);
+        bookingService.cancelReservation(reservationDto);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
