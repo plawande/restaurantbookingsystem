@@ -2,9 +2,11 @@ package com.project.restaurantbookingsystem.service;
 
 import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
+import com.project.restaurantbookingsystem.dto.RestaurantDto;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.ReservationPk;
+import com.project.restaurantbookingsystem.entity.Restaurant;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -15,6 +17,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class EntityDtoMapper {
+
+    public List<RestaurantDto> getRestaurantsDtoList(List<Restaurant> restaurants) {
+        return restaurants.stream().map(this::createRestaurantDto).collect(Collectors.toList());
+    }
+
+    public RestaurantDto createRestaurantDto(Restaurant restaurant) {
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setId(restaurant.getId());
+        restaurantDto.setName(restaurant.getName());
+        return restaurantDto;
+    }
 
     public Map<LocalDate, List<DiningTableDto>> getTableAvailabilityDtoMap(Map<LocalDate, List<DiningTable>> tableAvailabilityMap) {
         Map<LocalDate, List<DiningTableDto>> diningTableDtoMap = new LinkedHashMap<>();
