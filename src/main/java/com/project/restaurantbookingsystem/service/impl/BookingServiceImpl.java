@@ -6,6 +6,7 @@ import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.*;
 import com.project.restaurantbookingsystem.service.BookingService;
+import com.project.restaurantbookingsystem.service.EntityDtoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,12 @@ public class BookingServiceImpl implements BookingService {
 
     private BookingDao bookingDao;
 
-    public BookingServiceImpl(BookingDao bookingDao) {
+    private EntityDtoMapper entityDtoMapper;
+
+    public BookingServiceImpl(BookingDao bookingDao,
+                              EntityDtoMapper entityDtoMapper) {
         this.bookingDao = bookingDao;
+        this.entityDtoMapper = entityDtoMapper;
     }
 
     @Override
@@ -80,14 +85,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Reservation createNewReservation(ReservationDto reservationDto) {
-        Reservation reservation = createReservationEntity(reservationDto);
+        Reservation reservation = entityDtoMapper.createReservationEntity(reservationDto);
         return bookingDao.createNewReservation(reservation);
     }
 
     @Override
     @Transactional
     public void cancelReservation(ReservationDto reservationDto) {
-        Reservation reservation = createReservationEntity(reservationDto);
+        Reservation reservation = entityDtoMapper.createReservationEntity(reservationDto);
         ArchivedReservation archivedReservation = createReservationArchive(reservation);
         archivedReservation.setStatus(BookingStatus.CANCELLED);
         bookingDao.archiveReservation(archivedReservation);
@@ -116,22 +121,13 @@ public class BookingServiceImpl implements BookingService {
 
     private Map<String, Reservation> createReservationEntities(UpdateReservationDto updateReservationDto) {
         Reservation existingReservation =
-                createReservationEntity(updateReservationDto.getExistingReservationDto());
+                entityDtoMapper.createReservationEntity(updateReservationDto.getExistingReservationDto());
         Reservation newReservation =
-                createReservationEntity(updateReservationDto.getNewReservationDto());
+                entityDtoMapper.createReservationEntity(updateReservationDto.getNewReservationDto());
         Map<String, Reservation> reservationMap = new HashMap<>();
         reservationMap.put("existing", existingReservation);
         reservationMap.put("new", newReservation);
         return reservationMap;
-    }
-
-    private Reservation createReservationEntity(ReservationDto reservationDto) {
-        Reservation reservation = new Reservation();
-        ReservationPk reservationPk = new ReservationPk();
-        reservationPk.setTableId(reservationDto.getTableId());
-        reservationPk.setDate(reservationDto.getDate());
-        reservation.setReservationPk(reservationPk);
-        return reservation;
     }
 
     private List<LocalDate> getAllDatesInRange(LocalDate startDate, LocalDate endDate) {
@@ -147,25 +143,5 @@ public class BookingServiceImpl implements BookingService {
             }
         }
         return dates;
-    }
-
-    @Override
-    public Map<LocalDate, List<DiningTableDto>> getTableAvailabilityDtoMap(Map<LocalDate, List<DiningTable>> tableAvailabilityMap) {
-        Map<LocalDate, List<DiningTableDto>> diningTableDtoMap = new LinkedHashMap<>();
-        for(Map.Entry<LocalDate, List<DiningTable>> entry: tableAvailabilityMap.entrySet()) {
-            List<DiningTable> entityList = entry.getValue();
-            List<DiningTableDto> entityDtoList =
-                    entityList.stream().map(this::mapToDiningTableDto).collect(Collectors.toList());
-            diningTableDtoMap.put(entry.getKey(), entityDtoList);
-        }
-        return diningTableDtoMap;
-    }
-
-    private DiningTableDto mapToDiningTableDto(DiningTable diningTable) {
-        DiningTableDto diningTableDto = new DiningTableDto();
-        diningTableDto.setId(diningTable.getId());
-        diningTableDto.setNumber(diningTable.getNumber());
-        diningTableDto.setCapacity(diningTable.getCapacity());
-        return diningTableDto;
     }
 }

@@ -6,6 +6,7 @@ import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.service.BookingService;
+import com.project.restaurantbookingsystem.service.EntityDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -23,10 +24,14 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
+    @Autowired
+    private EntityDtoMapper entityDtoMapper;
+
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createReservation(@RequestBody ReservationDto reservationDto) {
         Reservation createdReservation = bookingService.createNewReservation(reservationDto);
-        return ResponseEntity.ok(createdReservation);
+        ReservationDto reservationDtoCreated = entityDtoMapper.createReservationDto(createdReservation);
+        return ResponseEntity.ok(reservationDtoCreated);
     }
 
     @PostMapping(value = "/cancel", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -37,8 +42,9 @@ public class BookingController {
 
     @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateReservation(@RequestBody UpdateReservationDto updateReservationDto) {
-        Reservation cancelledReservation = bookingService.updateReservation(updateReservationDto);
-        return ResponseEntity.ok(cancelledReservation);
+        Reservation updatedReservation = bookingService.updateReservation(updateReservationDto);
+        ReservationDto reservationDtoUpdated = entityDtoMapper.createReservationDto(updatedReservation);
+        return ResponseEntity.ok(reservationDtoUpdated);
     }
 
     @GetMapping(value = "/table/availability", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +55,7 @@ public class BookingController {
         Map<LocalDate, List<DiningTable>> tableAvailabilityMap =
                 bookingService.findTablesByRestaurantIdAndSeatingCapacityAndDateRange(restaurantId, capacity, startDate, endDate);
         Map<LocalDate, List<DiningTableDto>> tableAvailabilityMapDto =
-                bookingService.getTableAvailabilityDtoMap(tableAvailabilityMap);
+                entityDtoMapper.getTableAvailabilityDtoMap(tableAvailabilityMap);
         return ResponseEntity.ok(tableAvailabilityMapDto);
     }
 }
