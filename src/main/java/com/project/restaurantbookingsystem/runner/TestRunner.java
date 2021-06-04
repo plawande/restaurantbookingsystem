@@ -2,11 +2,14 @@ package com.project.restaurantbookingsystem.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.project.restaurantbookingsystem.dto.ReservationDto;
+import com.project.restaurantbookingsystem.dto.UserDto;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.ReservationPk;
 import com.project.restaurantbookingsystem.entity.Restaurant;
 import com.project.restaurantbookingsystem.service.BookingService;
+import com.project.restaurantbookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,9 @@ public class TestRunner implements CommandLineRunner {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -73,5 +79,11 @@ public class TestRunner implements CommandLineRunner {
         System.out.println("New Table Reserved: " + newReservation.getStatus() + " " +
                 newReservation.getReservationPk().getDate() + " " +
                 newReservation.getReservationPk().getTableId());*/
+
+        /*List<ReservationDto> reservationDtos =
+                userService.getUserReservationDetails(9545925726L);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        System.out.println(mapper.writeValueAsString(reservationDtos));*/
     }
 }

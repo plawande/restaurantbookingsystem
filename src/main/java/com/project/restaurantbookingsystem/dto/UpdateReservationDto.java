@@ -1,5 +1,6 @@
 package com.project.restaurantbookingsystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Getter
@@ -7,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateReservationDto {
     private ReservationDto existingReservationDto;
     private ReservationDto newReservationDto;
