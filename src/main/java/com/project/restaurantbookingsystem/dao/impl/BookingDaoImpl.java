@@ -6,12 +6,9 @@ import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.Restaurant;
 import org.hibernate.annotations.QueryHints;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
