@@ -1,18 +1,18 @@
 package com.project.restaurantbookingsystem.dao.impl;
 
 import com.project.restaurantbookingsystem.dao.BookingDao;
-import com.project.restaurantbookingsystem.entity.ArchivedReservation;
-import com.project.restaurantbookingsystem.entity.DiningTable;
-import com.project.restaurantbookingsystem.entity.Reservation;
-import com.project.restaurantbookingsystem.entity.Restaurant;
+import com.project.restaurantbookingsystem.entity.*;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BookingDaoImpl implements BookingDao {
@@ -71,6 +71,20 @@ public class BookingDaoImpl implements BookingDao {
 
     @Override
     @Transactional
+    public Reservation getExistingReservation(ReservationPk reservationPk) {
+        List<Reservation> list = entityManager.createQuery("" +
+                "Select rvn " +
+                "from Reservation rvn " +
+                "join fetch rvn.user usr " +
+                "where rvn.reservationPk = :reservationPk")
+                .setParameter("reservationPk", reservationPk)
+                .getResultList();
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);  //better exception handling needed
+    }
+
+
+    @Override
+    @Transactional
     public Reservation createNewReservation(Reservation reservation) {
         entityManager.persist(reservation);
         return reservation;
@@ -79,9 +93,10 @@ public class BookingDaoImpl implements BookingDao {
     @Override
     @Transactional
     public void cancelReservation(Reservation reservation) {
-        Reservation reservationPersistent =
+        /*Reservation reservationPersistent =
                 entityManager.find(Reservation.class, reservation.getReservationPk());
-        entityManager.remove(reservationPersistent);
+        entityManager.remove(reservationPersistent);*/
+        entityManager.remove(reservation);
     }
 
     @Override

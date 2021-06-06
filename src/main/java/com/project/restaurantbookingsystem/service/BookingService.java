@@ -4,6 +4,7 @@ import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.DiningTable;
 import com.project.restaurantbookingsystem.entity.Reservation;
+import com.project.restaurantbookingsystem.entity.ReservationPk;
 import com.project.restaurantbookingsystem.entity.Restaurant;
 
 import java.time.LocalDate;
@@ -20,6 +21,8 @@ public interface BookingService {
     List<Reservation> findReservationsByRestaurantIdAndDateRange(Long id, LocalDate startDate, LocalDate endDate);
 
     Map<LocalDate, List<DiningTable>> findTablesByRestaurantIdAndSeatingCapacityAndDateRange(Long id, Long capacity, LocalDate startDate, LocalDate endDate);
+
+    Reservation getExistingReservation(ReservationDto reservationDto);
 
     Reservation createNewReservation(ReservationDto reservationDto);
 

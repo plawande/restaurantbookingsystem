@@ -85,5 +85,12 @@ public class TestRunner implements CommandLineRunner {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         System.out.println(mapper.writeValueAsString(reservationDtos));*/
+
+        /*ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setTableId(1L);
+        reservationDto.setDate(LocalDate.of(2021, 05, 29));
+        Reservation reservation =
+                bookingService.getExistingReservation(reservationDto);
+        System.out.println();*/
     }
 }

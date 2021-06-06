@@ -22,4 +22,7 @@ public class ArchivedReservation extends BaseClass {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private BookingStatus status;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

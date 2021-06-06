@@ -3,10 +3,8 @@ package com.project.restaurantbookingsystem.service;
 import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.RestaurantDto;
-import com.project.restaurantbookingsystem.entity.DiningTable;
-import com.project.restaurantbookingsystem.entity.Reservation;
-import com.project.restaurantbookingsystem.entity.ReservationPk;
-import com.project.restaurantbookingsystem.entity.Restaurant;
+import com.project.restaurantbookingsystem.dto.UserDto;
+import com.project.restaurantbookingsystem.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -54,6 +52,10 @@ public class EntityDtoMapper {
         reservationPk.setTableId(reservationDto.getTableId());
         reservationPk.setDate(reservationDto.getDate());
         reservation.setReservationPk(reservationPk);
+        UserDto userDto = reservationDto.getUserDto();
+        User user = new User();
+        user.setId(Long.valueOf(userDto.getId()));
+        reservation.setUser(user);
         return reservation;
     }
 
@@ -61,6 +63,10 @@ public class EntityDtoMapper {
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setTableId(reservation.getReservationPk().getTableId());
         reservationDto.setDate(reservation.getReservationPk().getDate());
+        User user = reservation.getUser();
+        UserDto userDto = new UserDto();
+        userDto.setId(String.valueOf(user.getId()));
+        reservationDto.setUserDto(userDto);
         return reservationDto;
     }
 }

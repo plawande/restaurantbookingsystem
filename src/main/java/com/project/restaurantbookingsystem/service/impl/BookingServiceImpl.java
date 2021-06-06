@@ -84,6 +84,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public Reservation getExistingReservation(ReservationDto reservationDto) {
+        ReservationPk reservationPk = new ReservationPk();
+        reservationPk.setTableId(reservationDto.getTableId());
+        reservationPk.setDate(reservationDto.getDate());
+        return bookingDao.getExistingReservation(reservationPk);
+    }
+
+    @Override
     public Reservation createNewReservation(ReservationDto reservationDto) {
         Reservation reservation = entityDtoMapper.createReservationEntity(reservationDto);
         return bookingDao.createNewReservation(reservation);
@@ -92,7 +100,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public void cancelReservation(ReservationDto reservationDto) {
-        Reservation reservation = entityDtoMapper.createReservationEntity(reservationDto);
+        Reservation reservation = getExistingReservation(reservationDto);
         ArchivedReservation archivedReservation = createReservationArchive(reservation);
         archivedReservation.setStatus(BookingStatus.CANCELLED);
         bookingDao.archiveReservation(archivedReservation);
@@ -116,12 +124,13 @@ public class BookingServiceImpl implements BookingService {
         ArchivedReservation archivedReservation = new ArchivedReservation();
         archivedReservation.setTableId(existingReservation.getReservationPk().getTableId());
         archivedReservation.setDate(existingReservation.getReservationPk().getDate());
+        archivedReservation.setUserId(existingReservation.getUser().getId());
         return archivedReservation;
     }
 
     private Map<String, Reservation> createReservationEntities(UpdateReservationDto updateReservationDto) {
         Reservation existingReservation =
-                entityDtoMapper.createReservationEntity(updateReservationDto.getExistingReservationDto());
+                getExistingReservation(updateReservationDto.getExistingReservationDto());
         Reservation newReservation =
                 entityDtoMapper.createReservationEntity(updateReservationDto.getNewReservationDto());
         Map<String, Reservation> reservationMap = new HashMap<>();

@@ -15,4 +15,5 @@ public class ReservationDto {
     private Long tableId;
     private LocalDate date;
     private DiningTableDto diningTableDto;
+    private UserDto userDto;
 }
