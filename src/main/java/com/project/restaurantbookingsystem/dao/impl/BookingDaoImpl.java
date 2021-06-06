@@ -95,7 +95,7 @@ public class BookingDaoImpl implements BookingDao {
     public void cancelReservation(Reservation reservation) {
         /*Reservation reservationPersistent =
                 entityManager.find(Reservation.class, reservation.getReservationPk());
-        entityManager.remove(reservationPersistent);*/
+        entityManager.remove(reservationPersistent);*/ //This commented section is the way to go if the incoming entity is not persistent.
         entityManager.remove(reservation);
     }
 
