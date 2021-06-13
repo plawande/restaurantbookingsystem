@@ -112,3 +112,4 @@ public class BookingDaoImpl implements BookingDao {
 //https://vladmihalcea.com/jpa-persist-merge-hibernate-save-update-saveorupdate/
 //https://stackoverflow.com/questions/1607532/when-to-use-entitymanager-find-vs-entitymanager-getreference-with-jpa
 //https://stackoverflow.com/questions/11539720/javax-persistence-entitymanager-remove-method/11539796
+//https://www.baeldung.com/jpa-entity-manager-get-reference
