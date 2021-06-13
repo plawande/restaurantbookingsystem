@@ -1,39 +1,25 @@
 package com.project.restaurantbookingsystem.dao.impl;
 
 import com.project.restaurantbookingsystem.dao.BookingDao;
-import com.project.restaurantbookingsystem.entity.*;
+import com.project.restaurantbookingsystem.entity.ArchivedReservation;
+import com.project.restaurantbookingsystem.entity.DiningTable;
+import com.project.restaurantbookingsystem.entity.Reservation;
+import com.project.restaurantbookingsystem.entity.ReservationPk;
 import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class BookingDaoImpl implements BookingDao {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Override
-    @Transactional
-    public List<Restaurant> findAllRestaurants() {
-        return entityManager.createQuery("" +
-                "Select r " +
-                "from Restaurant r ", Restaurant.class)
-                .getResultList();
-    }
-
-    @Override
-    @Transactional
-    public Restaurant findRestaurantById(Long id) {
-        return entityManager.find(Restaurant.class, id);
-    }
 
     @Override
     @Transactional

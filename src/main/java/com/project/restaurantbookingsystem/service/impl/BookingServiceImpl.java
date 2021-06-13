@@ -1,7 +1,6 @@
 package com.project.restaurantbookingsystem.service.impl;
 
 import com.project.restaurantbookingsystem.dao.BookingDao;
-import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
 import com.project.restaurantbookingsystem.entity.*;
@@ -26,16 +25,6 @@ public class BookingServiceImpl implements BookingService {
                               EntityDtoMapper entityDtoMapper) {
         this.bookingDao = bookingDao;
         this.entityDtoMapper = entityDtoMapper;
-    }
-
-    @Override
-    public List<Restaurant> findAllRestaurants() {
-        return bookingDao.findAllRestaurants();
-    }
-
-    @Override
-    public Restaurant findRestaurantById(Long id) {
-        return bookingDao.findRestaurantById(id);
     }
 
     @Override
