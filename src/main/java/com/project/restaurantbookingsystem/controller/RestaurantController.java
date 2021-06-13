@@ -24,7 +24,7 @@ public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllRestaurants() {
         List<Restaurant> restaurants = restaurantService.findAllRestaurants();
         List<RestaurantDto> restaurantsDtoList = entityDtoMapper.getRestaurantsDtoList(restaurants);
@@ -34,7 +34,7 @@ public class RestaurantController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllRestaurantById(@PathVariable("id") Long id) {
         Restaurant restaurant = restaurantService.findRestaurantById(id);
-        RestaurantDto restaurantsDto = entityDtoMapper.createRestaurantDto(restaurant);
+        RestaurantDto restaurantsDto = entityDtoMapper.createRestaurantDtoWithTables(restaurant);
         return ResponseEntity.ok(restaurantsDto);
     }
 }

@@ -8,9 +8,7 @@ import com.project.restaurantbookingsystem.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,6 +22,25 @@ public class EntityDtoMapper {
         RestaurantDto restaurantDto = new RestaurantDto();
         restaurantDto.setId(restaurant.getId());
         restaurantDto.setName(restaurant.getName());
+        return restaurantDto;
+    }
+
+    public RestaurantDto createRestaurantDtoWithTables(Restaurant restaurant) {
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setId(restaurant.getId());
+        restaurantDto.setName(restaurant.getName());
+        List<DiningTable> tables = restaurant.getTables();
+        List<DiningTableDto> diningTableDtos = new ArrayList<>();
+        Iterator<DiningTable> tableIterator = tables.iterator();
+        while(tableIterator.hasNext()) {
+            DiningTable diningTable = tableIterator.next();
+            DiningTableDto diningTableDto = new DiningTableDto();
+            diningTableDto.setId(diningTable.getId());
+            diningTableDto.setNumber(diningTable.getNumber());
+            diningTableDto.setCapacity(diningTable.getCapacity());
+            diningTableDtos.add(diningTableDto);
+        }
+        restaurantDto.setDiningTableDtos(diningTableDtos);
         return restaurantDto;
     }
 
