@@ -1,9 +1,8 @@
-package com.project.restaurantbookingsystem.service;
+package com.project.restaurantbookingsystem.dao;
 
 import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.RestaurantDto;
-import com.project.restaurantbookingsystem.dto.UserDto;
 import org.hibernate.transform.ResultTransformer;
 
 import java.time.LocalDate;

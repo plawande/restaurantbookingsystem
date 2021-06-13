@@ -1,9 +1,8 @@
 package com.project.restaurantbookingsystem.dao.impl;
 
 import com.project.restaurantbookingsystem.dao.UserDao;
+import com.project.restaurantbookingsystem.dao.UserReservationDtoTransformer;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
-import com.project.restaurantbookingsystem.dto.UserDto;
-import com.project.restaurantbookingsystem.service.UserReservationDtoTransformer;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
