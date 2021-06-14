@@ -19,3 +19,13 @@ public class Restaurant extends BaseClass {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiningTable> tables;
 }
+
+/*cascade = {
+        CascadeType.PERSIST,
+        CascadeType.MERGE,
+        CascadeType.REMOVE
+        }*/
+
+//cascade = CascadeType.ALL
+
+//orphanRemoval = true

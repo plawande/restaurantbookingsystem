@@ -23,4 +23,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant findRestaurantById(Long id) {
         return restaurantDao.findRestaurantById(id);
     }
+
+    @Override
+    public Restaurant saveRestaurant(Restaurant restaurant) {
+        return restaurantDao.saveRestaurant(restaurant);
+    }
 }

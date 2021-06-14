@@ -9,12 +9,15 @@ import com.project.restaurantbookingsystem.entity.Reservation;
 import com.project.restaurantbookingsystem.entity.ReservationPk;
 import com.project.restaurantbookingsystem.entity.Restaurant;
 import com.project.restaurantbookingsystem.service.BookingService;
+import com.project.restaurantbookingsystem.service.RestaurantService;
 import com.project.restaurantbookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +30,9 @@ public class TestRunner implements CommandLineRunner {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RestaurantService restaurantService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -92,5 +98,42 @@ public class TestRunner implements CommandLineRunner {
         Reservation reservation =
                 bookingService.getExistingReservation(reservationDto);
         System.out.println();*/
+
+        //Persist operation
+        /*Restaurant restaurant = new Restaurant();
+        restaurant.setName("Test Restaurant");
+        DiningTable diningTable = new DiningTable();
+        diningTable.setNumber(21L);
+        diningTable.setCapacity(6L);
+        diningTable.setRestaurant(restaurant);
+        DiningTable diningTable2 = new DiningTable();
+        diningTable2.setNumber(22L);
+        diningTable2.setCapacity(6L);
+        diningTable2.setRestaurant(restaurant);
+        List<DiningTable> diningTables = new ArrayList<>();
+        diningTables.add(diningTable);
+        diningTables.add(diningTable2);
+        restaurant.setTables(diningTables);
+        restaurantService.saveRestaurant(restaurant);*/
+
+        //Merge operation
+        /*Restaurant restaurant = restaurantService.findRestaurantById(8L);
+        List<DiningTable> diningTableList = restaurant.getTables();
+        List<Long> removeIds = Arrays.asList(24L);
+        List<DiningTable> diningTableListToBeMerged =diningTableList.stream()
+                .filter(diningTable -> !removeIds.contains(diningTable.getId()))  //delete orphan
+                .collect(Collectors.toList());
+        for(DiningTable diningTable: diningTableList) {
+            if(diningTable.getId().equals(15L))
+                diningTable.setCapacity(9L);  //merge
+        }
+        DiningTable diningTable = new DiningTable();
+        diningTable.setNumber(35L);
+        diningTable.setCapacity(6L);
+        diningTable.setRestaurant(restaurant);
+        diningTableListToBeMerged.add(diningTable);  //persist
+        restaurant.setTables(diningTableListToBeMerged);
+        Restaurant updatedRestaurant = restaurantService.saveRestaurant(restaurant);
+        System.out.println(updatedRestaurant.getTables().size());*/
     }
 }
