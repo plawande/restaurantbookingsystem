@@ -1,5 +1,6 @@
 package com.project.restaurantbookingsystem.controller;
 
+import com.project.restaurantbookingsystem.annotation.TrackDetails;
 import com.project.restaurantbookingsystem.dto.DiningTableDto;
 import com.project.restaurantbookingsystem.dto.ReservationDto;
 import com.project.restaurantbookingsystem.dto.UpdateReservationDto;
@@ -27,6 +28,7 @@ public class BookingController {
     @Autowired
     private EntityDtoMapper entityDtoMapper;
 
+    @TrackDetails
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createReservation(@RequestBody ReservationDto reservationDto) {
         Reservation createdReservation = bookingService.createNewReservation(reservationDto);
