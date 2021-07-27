@@ -33,3 +33,5 @@ public class LoggingAdvice {
         return object;
     }
 }
+
+//https://stackoverflow.com/questions/58275121/will-an-aspect-be-executed-asynchronously-if-i-put-async-method-on-it
