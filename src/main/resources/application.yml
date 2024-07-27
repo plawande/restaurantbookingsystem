@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/restaurantdb
     username: root
-    password: Test1234
+    password: Test$_$123
   jpa:
     hibernate:
       ddl-auto: none
